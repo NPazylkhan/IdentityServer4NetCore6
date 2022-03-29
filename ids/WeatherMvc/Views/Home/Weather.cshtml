@@ -5,17 +5,22 @@
     Layout = "_Layout";
 }
 
-<h2>Weather</h2>
+<h5 style="text-align:center;">Weather Data From WeatherForecastAPI</h5>
 
-<table>
+<table class="table table-hover">
+    <tr>
+        <th>Date</th>
+        <th>Summary</th>
+        <th>TemperatureF</th>
+        <th>TemperatureC</th>
+    </tr>
     @foreach (var item in Model)
     {
         <tr>
-            <td>@item.Date</td>
+            <td>@item.Date.ToString("dd.mm.yyyy")</td>
             <td>@item.Summary</td>
             <td>@item.TemperatureF</td>
             <td>@item.TemperatureC</td>
         </tr>
     }
-    
 </table>
