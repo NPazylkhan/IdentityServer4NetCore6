@@ -37,7 +37,6 @@ if (seed)
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 // Add services to the container.
 builder.Services.AddRazorPages();
 
@@ -57,18 +56,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
 builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddIdentityServer()
-    .AddAspNetIdentity<IdentityUser>()
-    .AddConfigurationStore(options =>
-    {
-        options.ConfigureDbContext = b =>
-        b.UseSqlServer(defaultConnString, opt => opt.MigrationsAssembly(assembly));
-    })
-    .AddOperationalStore(options =>
-    {
-        options.ConfigureDbContext = b =>
-        b.UseSqlServer(defaultConnString, opt => opt.MigrationsAssembly(assembly));
-    })
-    .AddDeveloperSigningCredential();
+        .AddAspNetIdentity<IdentityUser>()
+        .AddConfigurationStore(options => { options.ConfigureDbContext = b => b.UseSqlServer(defaultConnString, opt => opt.MigrationsAssembly(assembly)); })
+        .AddOperationalStore(options => { options.ConfigureDbContext = b => b.UseSqlServer(defaultConnString, opt => opt.MigrationsAssembly(assembly)); })
+        .AddDeveloperSigningCredential();
 
 builder.Services.AddAuthentication()
     .AddGoogle("Google", options =>
