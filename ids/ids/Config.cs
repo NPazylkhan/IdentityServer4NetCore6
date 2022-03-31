@@ -118,7 +118,11 @@ namespace ids
               PostLogoutRedirectUris = {"https://localhost:5444/signout-callback-oidc"},
 
               AllowOfflineAccess = true,
-              AllowedScopes = {"openid", "profile", "weatherapi.read"},
+              AllowedScopes = {
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile,
+                    "weatherapi.read"
+                },
               RequirePkce = true,
               RequireConsent = true,
               AllowPlainTextPkce = false

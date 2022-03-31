@@ -8,10 +8,10 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddAuthentication(options =>
     {
-        options.DefaultScheme = "cookie";
+        options.DefaultScheme = "Cookies";
         options.DefaultChallengeScheme = "oidc";
     })
-    .AddCookie("cookie")
+    .AddCookie("Cookies")
     .AddOpenIdConnect("oidc", options =>
     {
         options.Authority    = builder.Configuration["InteractiveServiceSettings:AuthorityUrl"];
@@ -24,6 +24,9 @@ builder.Services.AddAuthentication(options =>
 
         options.Scope.Add(builder.Configuration["InteractiveServiceSettings:Scopes:0"]);
         options.SaveTokens = true;
+
+        options.Scope.Add("profile");
+        options.GetClaimsFromUserInfoEndpoint = true;
     });
 
 builder.Services.Configure<IdentityServerSettings>(builder.Configuration.GetSection("IdentityServerSettings"));
