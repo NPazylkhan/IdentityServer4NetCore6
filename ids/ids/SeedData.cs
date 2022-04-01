@@ -1,15 +1,11 @@
-﻿using System;
-using System.Linq;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using IdentityModel;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
 using IdentityServer4.EntityFramework.Storage;
-using ids;
 using ids.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
 
@@ -21,22 +17,22 @@ namespace ids
         {
             var services = new ServiceCollection();
             services.AddLogging();
-            services.AddDbContext<ApplicationDbContext>(options =>
-              options.UseSqlServer(connectionString));
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 
             services.AddIdentity<IdentityUser, IdentityRole>()
-              .AddEntityFrameworkStores<ApplicationDbContext>()
-              .AddDefaultTokenProviders();
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
             services.AddOperationalDbContext(options =>
             {
                 options.ConfigureDbContext = db =>
-                  db.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(typeof(SeedData).Assembly.FullName));
+                    db.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(typeof(SeedData).Assembly.FullName));
             });
+
             services.AddConfigurationDbContext(options =>
             {
                 options.ConfigureDbContext = db =>
-                  db.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(typeof(SeedData).Assembly.FullName));
+                    db.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(typeof(SeedData).Assembly.FullName));
             });
 
             var serviceProvider = services.BuildServiceProvider();
@@ -60,6 +56,7 @@ namespace ids
         {
             var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
             var alice = userMgr.FindByNameAsync("alice").Result;
+
             if (alice == null)
             {
                 alice = new IdentityUser
@@ -68,7 +65,9 @@ namespace ids
                     Email = "AliceSmith@email.com",
                     EmailConfirmed = true,
                 };
+
                 var result = userMgr.CreateAsync(alice, "Pass123$").Result;
+
                 if (!result.Succeeded)
                 {
                     throw new Exception(result.Errors.First().Description);
@@ -94,7 +93,9 @@ namespace ids
                 Log.Debug("alice already exists");
             }
 
+            //new user
             var bob = userMgr.FindByNameAsync("bob").Result;
+            
             if (bob == null)
             {
                 bob = new IdentityUser
@@ -103,7 +104,9 @@ namespace ids
                     Email = "BobSmith@email.com",
                     EmailConfirmed = true
                 };
+
                 var result = userMgr.CreateAsync(bob, "Pass123$").Result;
+
                 if (!result.Succeeded)
                 {
                     throw new Exception(result.Errors.First().Description);
@@ -111,12 +114,13 @@ namespace ids
 
                 result = userMgr.AddClaimsAsync(bob, new Claim[]
                 {
-                  new Claim(JwtClaimTypes.Name, "Bob Smith"),
-                  new Claim(JwtClaimTypes.GivenName, "Bob"),
-                  new Claim(JwtClaimTypes.FamilyName, "Smith"),
-                  new Claim(JwtClaimTypes.WebSite, "http://bob.com"),
-                  new Claim("location", "somewhere")
+                    new Claim(JwtClaimTypes.Name, "Bob Smith"),
+                    new Claim(JwtClaimTypes.GivenName, "Bob"),
+                    new Claim(JwtClaimTypes.FamilyName, "Smith"),
+                    new Claim(JwtClaimTypes.WebSite, "http://bob.com"),
+                    new Claim("location", "somewhere")
                 }).Result;
+
                 if (!result.Succeeded)
                 {
                     throw new Exception(result.Errors.First().Description);

@@ -1,12 +1,8 @@
 using IdentityServer4;
-using IdentityServer4.Models;
-using IdentityServer4.Test;
 using ids;
 using ids.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Events;

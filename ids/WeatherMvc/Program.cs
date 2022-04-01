@@ -1,4 +1,3 @@
-using System.Configuration;
 using WeatherMvc.Services;
 
 var builder = WebApplication.CreateBuilder(args);
